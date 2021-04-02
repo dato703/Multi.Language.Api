@@ -5,7 +5,7 @@ using Multi.Language.Infrastructure;
 
 namespace Multi.Language.Api.Configuration
 {
-    public static class DatabaseInitializerExtensions
+    public static class DatabaseConfiguration
     {
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {

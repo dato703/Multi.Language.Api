@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Multi.Language.Api.Authorization;
 using Multi.Language.Api.Configuration;
 using Multi.Language.Application.Commands;
 using Multi.Language.Application.Queries;
 using Multi.Language.Domain.SeedWork;
 using Multi.Language.Domain.UserAggregate;
 using Multi.Language.Infrastructure;
+using Multi.Language.Infrastructure.Redis;
 using Multi.Language.Infrastructure.Repositories;
 
 namespace Multi.Language.Api
@@ -30,8 +32,11 @@ namespace Multi.Language.Api
             services.AddSwaggerMiddleWear();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IRedisManager, RedisManager>();
+            services.AddScoped<IAuthorizationService, AuthorizationService>();
             services.AddScoped<CommandProcessor>();
             services.AddScoped<QueryProcessor>();
+            services.AddRedis(Configuration);
             services.AddDatabase(Configuration);
         }
 
