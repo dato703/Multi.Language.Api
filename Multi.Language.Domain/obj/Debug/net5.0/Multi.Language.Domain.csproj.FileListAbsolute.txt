@@ -1,0 +1,15 @@
+C:\Users\dato7\OneDrive\Documents\Visual Studio 2019\Projects\Multi.Language.Api\Multi.Language.Domain\bin\Debug\net5.0\Multi.Language.Domain.deps.json
+C:\Users\dato7\OneDrive\Documents\Visual Studio 2019\Projects\Multi.Language.Api\Multi.Language.Domain\bin\Debug\net5.0\Multi.Language.Domain.dll
+C:\Users\dato7\OneDrive\Documents\Visual Studio 2019\Projects\Multi.Language.Api\Multi.Language.Domain\bin\Debug\net5.0\ref\Multi.Language.Domain.dll
+C:\Users\dato7\OneDrive\Documents\Visual Studio 2019\Projects\Multi.Language.Api\Multi.Language.Domain\bin\Debug\net5.0\Multi.Language.Domain.pdb
+C:\Users\dato7\OneDrive\Documents\Visual Studio 2019\Projects\Multi.Language.Api\Multi.Language.Domain\bin\Debug\net5.0\App.Core.dll
+C:\Users\dato7\OneDrive\Documents\Visual Studio 2019\Projects\Multi.Language.Api\Multi.Language.Domain\bin\Debug\net5.0\App.Core.pdb
+C:\Users\dato7\OneDrive\Documents\Visual Studio 2019\Projects\Multi.Language.Api\Multi.Language.Domain\obj\Debug\net5.0\Multi.Language.Domain.csprojAssemblyReference.cache
+C:\Users\dato7\OneDrive\Documents\Visual Studio 2019\Projects\Multi.Language.Api\Multi.Language.Domain\obj\Debug\net5.0\Multi.Language.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\dato7\OneDrive\Documents\Visual Studio 2019\Projects\Multi.Language.Api\Multi.Language.Domain\obj\Debug\net5.0\Multi.Language.Domain.AssemblyInfoInputs.cache
+C:\Users\dato7\OneDrive\Documents\Visual Studio 2019\Projects\Multi.Language.Api\Multi.Language.Domain\obj\Debug\net5.0\Multi.Language.Domain.AssemblyInfo.cs
+C:\Users\dato7\OneDrive\Documents\Visual Studio 2019\Projects\Multi.Language.Api\Multi.Language.Domain\obj\Debug\net5.0\Multi.Language.Domain.csproj.CoreCompileInputs.cache
+C:\Users\dato7\OneDrive\Documents\Visual Studio 2019\Projects\Multi.Language.Api\Multi.Language.Domain\obj\Debug\net5.0\Multi.Language.Domain.csproj.CopyComplete
+C:\Users\dato7\OneDrive\Documents\Visual Studio 2019\Projects\Multi.Language.Api\Multi.Language.Domain\obj\Debug\net5.0\Multi.Language.Domain.dll
+C:\Users\dato7\OneDrive\Documents\Visual Studio 2019\Projects\Multi.Language.Api\Multi.Language.Domain\obj\Debug\net5.0\ref\Multi.Language.Domain.dll
+C:\Users\dato7\OneDrive\Documents\Visual Studio 2019\Projects\Multi.Language.Api\Multi.Language.Domain\obj\Debug\net5.0\Multi.Language.Domain.pdb

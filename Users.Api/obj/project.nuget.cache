@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "tE2V9gfgi+s7TrIpK6mcPSK1KIOJJOBYfd3lRnblZz7I8k/kY4g4xYiWo2O4FFFq6OJYY13Q/e6PE+sXwQh9NQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\dato7\\OneDrive\\Documents\\Visual Studio 2019\\Projects\\Multi.Language.Api\\Users.Api\\Users.Api.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\dato7\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "C:\\Users\\dato7\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\dato7\\.nuget\\packages\\swashbuckle.aspnetcore\\5.6.3\\swashbuckle.aspnetcore.5.6.3.nupkg.sha512",
+    "C:\\Users\\dato7\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\5.6.3\\swashbuckle.aspnetcore.swagger.5.6.3.nupkg.sha512",
+    "C:\\Users\\dato7\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\5.6.3\\swashbuckle.aspnetcore.swaggergen.5.6.3.nupkg.sha512",
+    "C:\\Users\\dato7\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\5.6.3\\swashbuckle.aspnetcore.swaggerui.5.6.3.nupkg.sha512"
+  ],
+  "logs": []
+}
