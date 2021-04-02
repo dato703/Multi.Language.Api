@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Multi.Language.Application.Commands;
 using Multi.Language.Application.Queries;
+using Multi.Language.Application.Authorization;
 
 namespace Multi.Language.Api.Controllers
 {
@@ -10,10 +11,12 @@ namespace Multi.Language.Api.Controllers
     {
         protected readonly CommandProcessor CommandProcessor;
         protected readonly QueryProcessor QueryProcessor;
-        public BaseController(CommandProcessor commandProcessor, QueryProcessor queryProcessor)
+        protected readonly IAuthorizationService AuthorizationService;
+        public BaseController(CommandProcessor commandProcessor, QueryProcessor queryProcessor, IAuthorizationService authorizationService)
         {
             CommandProcessor = commandProcessor;
             QueryProcessor = queryProcessor;
+            AuthorizationService = authorizationService;
         }
     }
 }

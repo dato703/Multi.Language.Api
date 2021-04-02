@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using App.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Multi.Language.Application.Authorization;
 using Multi.Language.Domain.SeedWork;
 
 namespace Multi.Language.Application.Commands
@@ -11,9 +12,11 @@ namespace Multi.Language.Application.Commands
     public class CommandProcessor
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CommandProcessor(IUnitOfWork unitOfWork)
+        private readonly IAuthorizationService _authorizationService;
+        public CommandProcessor(IUnitOfWork unitOfWork, IAuthorizationService authorizationService)
         {
             _unitOfWork = unitOfWork;
+            _authorizationService = authorizationService;
         }
 
         public async Task Execute(CommandBase command)
@@ -24,7 +27,7 @@ namespace Multi.Language.Application.Commands
 
                 if (command.NeedTransaction)
                 {
-                    command.Initialize(_unitOfWork);
+                    command.Initialize(_unitOfWork, _authorizationService);
                     await _unitOfWork.UseTransaction(async () =>
                     {
                         await ExecuteCommand(command);
@@ -32,7 +35,7 @@ namespace Multi.Language.Application.Commands
                 }
                 else
                 {
-                    command.Initialize(_unitOfWork);
+                    command.Initialize(_unitOfWork, _authorizationService);
                     await ExecuteCommand(command);
                 }
             }

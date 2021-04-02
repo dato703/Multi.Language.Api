@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using App.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Multi.Language.Application.Authorization;
 using Multi.Language.Domain.UserAggregate;
 
 namespace Multi.Language.Api.Authorization
@@ -27,21 +29,31 @@ namespace Multi.Language.Api.Authorization
 
             public void OnActionExecuting(ActionExecutingContext context)
             {
-                _authorizationService.SessionId = context.HttpContext.Request.Headers["session-id"];
+                try
+                {
 
-                if (!_authorizationService.IsAuthorized)
-                {
-                    var httpResult = HttpResult.Unauthorized();
-                    context.Result = new OkObjectResult(httpResult);
-                }
-                else
-                {
-                    var hasRoles = _authorizationService.HasAnyRole(_roles);
-                    if (!hasRoles)
+                    _authorizationService.SessionId = context.HttpContext.Request.Headers["session-id"];
+
+                    if (!_authorizationService.IsAuthorized)
                     {
-                        var httpResult = HttpResult.AccessDenied();
+                        var httpResult = HttpResult.Unauthorized();
                         context.Result = new OkObjectResult(httpResult);
                     }
+                    else
+                    {
+                        var hasRoles = _authorizationService.HasAnyRole(_roles);
+                        if (!hasRoles)
+                        {
+                            var httpResult = HttpResult.AccessDenied();
+                            context.Result = new OkObjectResult(httpResult);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    //throw;
+                    context.Result = new OkObjectResult(new HttpResult(HttpResultStatus.Error,e.Message));
                 }
             }
 

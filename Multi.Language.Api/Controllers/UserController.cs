@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using App.Core;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +9,7 @@ using Multi.Language.Application.Queries;
 using Multi.Language.Application.Queries.User;
 using Multi.Language.Application.ViewModels.User;
 using Multi.Language.Domain.UserAggregate;
+using Multi.Language.Application.Authorization;
 
 namespace Multi.Language.Api.Controllers
 {
@@ -17,7 +17,7 @@ namespace Multi.Language.Api.Controllers
     [ApiController]
     public class UserController : BaseController
     {
-        public UserController(CommandProcessor commandProcessor, QueryProcessor queryProcessor) : base(commandProcessor, queryProcessor)
+        public UserController(CommandProcessor commandProcessor, QueryProcessor queryProcessor, IAuthorizationService authorizationService) : base(commandProcessor, queryProcessor, authorizationService)
         {
         }
 

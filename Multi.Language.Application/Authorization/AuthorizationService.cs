@@ -5,7 +5,7 @@ using App.Core.Utils;
 using Multi.Language.Domain.UserAggregate;
 using Multi.Language.Infrastructure.Redis;
 
-namespace Multi.Language.Api.Authorization
+namespace Multi.Language.Application.Authorization
 {
     public class AuthorizationService : IAuthorizationService
     {

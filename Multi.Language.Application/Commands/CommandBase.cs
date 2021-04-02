@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using App.Core;
+using Multi.Language.Application.Authorization;
 using Multi.Language.Domain.SeedWork;
 
 namespace Multi.Language.Application.Commands
@@ -7,6 +8,7 @@ namespace Multi.Language.Application.Commands
     public abstract class CommandBase
     {
         protected IUnitOfWork UnitOfWork;
+        protected IAuthorizationService AuthorizationService;
 
         protected CommandBase()
         {
@@ -15,9 +17,10 @@ namespace Multi.Language.Application.Commands
         public string IpAddress { get; set; }
         public HttpResult HttpResult { get; internal set; }
 
-        public void Initialize(IUnitOfWork unitOfWork)
+        public void Initialize(IUnitOfWork unitOfWork, IAuthorizationService authorizationService)
         {
             UnitOfWork = unitOfWork;
+            AuthorizationService = authorizationService;
         }
 
         public virtual bool NeedTransaction { get; set; } = false;
