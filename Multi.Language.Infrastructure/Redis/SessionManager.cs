@@ -12,14 +12,6 @@ namespace Multi.Language.Infrastructure.Redis
             _redisManager = redisManager;
         }
 
-
-
-        public T this[string key]
-        {
-            get => GetSession(key);
-            set => SetSession(key, value);
-        }
-
         public T GetSession(string key)
         {
             return _redisManager.Get<T>(key, ExpirationTime);
@@ -56,11 +48,5 @@ namespace Multi.Language.Infrastructure.Redis
     public class SessionManagerBase
     {
         public static TimeSpan ExpirationTime { get; set; }
-
-        public static bool Delete(string pattern)
-        {
-            var redis = new RedisManager();
-            return redis.DeleteByPattern(pattern);
-        }
     }
 }

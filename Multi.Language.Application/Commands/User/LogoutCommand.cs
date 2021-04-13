@@ -11,11 +11,9 @@ namespace Multi.Language.Application.Commands.User
         {
             _sessionId = sessionId;
         }
-        internal override Task Execute()
+        internal override async Task Execute()
         {
-            HttpResult = AuthorizationService.LogOut(_sessionId) ? HttpResult.Successful() : HttpResult.Error();
-
-            return Task.CompletedTask;
+            HttpResult = await AuthorizationService.LogOutAsync(_sessionId) ? HttpResult.Successful() : HttpResult.Error();
         }
     }
 }

@@ -51,7 +51,7 @@ namespace Multi.Language.Api.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
-            var command = new LoginCommand(model,IpAddress);
+            var command = new LoginCommand(model);
             await CommandProcessor.Execute(command);
             return Ok(command.HttpResult);
         }
@@ -59,7 +59,7 @@ namespace Multi.Language.Api.Controllers
         [HttpPost]
         [AuthorizedUserRole(UserRole.User, UserRole.Administrator, UserRole.Administrator)]
         [Route("logout")]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
             if (!Request.Headers.TryGetValue("session-id", out var values))
             {
@@ -73,7 +73,7 @@ namespace Multi.Language.Api.Controllers
             }
 
             var logoutCommand = new LogoutCommand(sessionId);
-            _ = CommandProcessor.Execute(logoutCommand);
+            await CommandProcessor.Execute(logoutCommand);
 
             return Ok(logoutCommand.HttpResult);
         }

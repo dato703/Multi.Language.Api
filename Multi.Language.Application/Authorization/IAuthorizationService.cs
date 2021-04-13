@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Multi.Language.Domain.UserAggregate;
 
 namespace Multi.Language.Application.Authorization
@@ -12,8 +13,8 @@ namespace Multi.Language.Application.Authorization
         string IpAddress { get; set; }
         string SessionId { get; set; }
         bool HasAnyRole(IList<UserRole> userRoles);
-        string Login(AuthorizationUser user);
-        bool LogOut(string sessionId);
+        Task<string> LoginAsync(AuthorizationUser user);
+        Task<bool> LogOutAsync(string sessionId);
         bool SaveVerifyCode(string code);
         bool CheckVerifyCode(string code);
         bool SetVerifyToken(string token, dynamic data);

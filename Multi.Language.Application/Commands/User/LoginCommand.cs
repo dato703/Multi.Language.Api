@@ -10,12 +10,10 @@ namespace Multi.Language.Application.Commands.User
     public class LoginCommand : CommandBase
     {
         private readonly LoginViewModel _loginViewModel;
-        private readonly string _ipAddress;
 
-        public LoginCommand(LoginViewModel loginViewModel, string ipAddress)
+        public LoginCommand(LoginViewModel loginViewModel)
         {
             _loginViewModel = loginViewModel;
-            _ipAddress = ipAddress;
         }
         internal override async Task Execute()
         {
@@ -45,11 +43,11 @@ namespace Multi.Language.Application.Commands.User
                 LocalIpAddress = _loginViewModel.Browser.Ips.Count > 0 ? _loginViewModel.Browser.Ips[0] : "",
             };
 
-            var sessionId = AuthorizationService.Login(authorizationUser);
+            var sessionId = await AuthorizationService.LoginAsync(authorizationUser);
 
             if (_loginViewModel.Browser.BrowserId == null || _loginViewModel.Browser.BrowserId == Guid.Empty)
             {
-                _loginViewModel.Browser.BrowserId=Guid.NewGuid();
+                _loginViewModel.Browser.BrowserId = Guid.NewGuid();
             }
 
             if (!string.IsNullOrWhiteSpace(sessionId))

@@ -8,7 +8,7 @@ namespace Multi.Language.Infrastructure.Redis
 {
     public class RedisManager : IRedisManager
     {
-        private ConnectionMultiplexer redis => _connection.Value;
+        private ConnectionMultiplexer Redis => _connection.Value;
         private static Lazy<ConnectionMultiplexer> _connection;
 
         private static bool _throwOnException;
@@ -33,10 +33,10 @@ namespace Multi.Language.Infrastructure.Redis
 
 
 
-        public static void Initialize(bool throwOnExeption = true, params string[] hosts)
+        public static void Initialize(bool throwOnException = true, params string[] hosts)
         {
             _formattedHosts = string.Join(",", hosts);
-            _throwOnException = throwOnExeption;
+            _throwOnException = throwOnException;
 
         }
 
@@ -44,9 +44,9 @@ namespace Multi.Language.Infrastructure.Redis
         {
             try
             {
-                var db = redis.GetDatabase();
+                var database = Redis.GetDatabase();
                 var serializedValue = JsonService.Serialize(value);
-                return await db.StringSetAsync(key, serializedValue);
+                return await database.StringSetAsync(key, serializedValue);
             }
             catch (RedisConnectionException ex)
             {
@@ -71,7 +71,7 @@ namespace Multi.Language.Infrastructure.Redis
         {
             try
             {
-                var database = redis.GetDatabase();
+                var database = Redis.GetDatabase();
                 var serializedValue = JsonService.Serialize(value);
 
                 return await database.StringSetAsync(key, serializedValue, expirationTime);
@@ -99,8 +99,8 @@ namespace Multi.Language.Infrastructure.Redis
         {
             try
             {
-                var db = redis.GetDatabase();
-                var result = db.StringGetAsync(key);
+                var database = Redis.GetDatabase();
+                var result = database.StringGetAsync(key);
                 var task = Task.Factory.StartNew(() =>
                 {
                     var value = result.Result;
@@ -135,10 +135,10 @@ namespace Multi.Language.Infrastructure.Redis
         {
             try
             {
-                var db = redis.GetDatabase();
+                var database = Redis.GetDatabase();
 
-                var result = db.StringGetAsync(key);
-                await db.KeyExpireAsync(key, expirationTime);
+                var result = database.StringGetAsync(key);
+                await database.KeyExpireAsync(key, expirationTime);
 
                 var value = result.Result;
                 if (value.IsNullOrEmpty)
@@ -170,8 +170,8 @@ namespace Multi.Language.Infrastructure.Redis
         {
             try
             {
-                var db = redis.GetDatabase();
-                return await db.KeyDeleteAsync(key);
+                var database = Redis.GetDatabase();
+                return await database.KeyDeleteAsync(key);
             }
             catch (RedisConnectionException ex)
             {
@@ -196,18 +196,18 @@ namespace Multi.Language.Infrastructure.Redis
         {
             try
             {
-                var endpoints = redis.GetEndPoints();
-                var db = _connection.Value.GetDatabase();
+                var endpoints = Redis.GetEndPoints();
+                var database = _connection.Value.GetDatabase();
 
                 foreach (var endpoint in endpoints)
                 {
                     try
                     {
-                        var server = redis.GetServer(endpoint);
+                        var server = Redis.GetServer(endpoint);
                         var keys = server.Keys(pattern: pattern);
                         foreach (var key in keys)
                         {
-                            return await db.KeyDeleteAsync(key);
+                            return await database.KeyDeleteAsync(key);
                         }
                     }
                     catch (Exception ex)
@@ -240,15 +240,14 @@ namespace Multi.Language.Infrastructure.Redis
             }
         }
 
-
         public bool Set(string key, object value)
         {
             try
             {
-                var db = redis.GetDatabase();
+                var database = Redis.GetDatabase();
                 var serializedValue = JsonService.Serialize(value);
 
-                return db.StringSet(key, serializedValue);
+                return database.StringSet(key, serializedValue);
             }
             catch (RedisConnectionException ex)
             {
@@ -273,10 +272,10 @@ namespace Multi.Language.Infrastructure.Redis
         {
             try
             {
-                var db = redis.GetDatabase();
+                var database = Redis.GetDatabase();
                 var serializedValue = JsonService.Serialize(value);
 
-                return db.StringSet(key, serializedValue, expirationTime);
+                return database.StringSet(key, serializedValue, expirationTime);
             }
             catch (RedisConnectionException ex)
             {
@@ -301,8 +300,8 @@ namespace Multi.Language.Infrastructure.Redis
         {
             try
             {
-                var db = redis.GetDatabase();
-                var value = db.StringGet(key);
+                var database = Redis.GetDatabase();
+                var value = database.StringGet(key);
                 if (value.IsNullOrEmpty)
                 {
                     return default(T);
@@ -332,10 +331,10 @@ namespace Multi.Language.Infrastructure.Redis
         {
             try
             {
-                IDatabase db = redis.GetDatabase();
+                IDatabase database = Redis.GetDatabase();
 
-                var value = db.StringGet(key);
-                db.KeyExpire(key, expirationTime);
+                var value = database.StringGet(key);
+                database.KeyExpire(key, expirationTime);
 
                 if (value.IsNullOrEmpty)
                 {
@@ -366,8 +365,8 @@ namespace Multi.Language.Infrastructure.Redis
         {
             try
             {
-                var db = redis.GetDatabase();
-                return db.KeyDelete(key);
+                var database = Redis.GetDatabase();
+                return database.KeyDelete(key);
             }
             catch (RedisConnectionException ex)
             {
@@ -392,19 +391,19 @@ namespace Multi.Language.Infrastructure.Redis
         {
             try
             {
-                var endpoints = redis.GetEndPoints();
-                var db = _connection.Value.GetDatabase();
+                var endpoints = Redis.GetEndPoints();
+                var database = _connection.Value.GetDatabase();
 
                 foreach (var endpoint in endpoints)
                 {
                     try
                     {
-                        var server = redis.GetServer(endpoint);
+                        var server = Redis.GetServer(endpoint);
 
                         var keys = server.Keys(pattern: pattern).ToArray();
                         if (keys.Length > 0)
                         {
-                            db.KeyDelete(keys);
+                            database.KeyDelete(keys);
                         }
                     }
                     catch (Exception ex)

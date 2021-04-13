@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using App.Core.Utils;
 using Multi.Language.Domain.UserAggregate;
 using Multi.Language.Infrastructure.Redis;
@@ -12,13 +13,13 @@ namespace Multi.Language.Application.Authorization
         private const string SessionIdPrefix = "user_session_id_";
         private const string SessionIdSalt = "TRR34K)#4j54hH=--*dd?UU=>>FF#22vOOIH";
         private AuthorizationUser _currentUser;
-        private readonly SessionManager<AuthorizationUser> _redisManager;
+        private readonly SessionManager<AuthorizationUser> _authorizationUserSessionManager;
         private readonly SessionManager<string> _smsVerificationSession;
         private readonly SessionManager<dynamic> _tokenVerificationSession;
 
         public AuthorizationService(IRedisManager redis)
         {
-            _redisManager = new SessionManager<AuthorizationUser>(redis);
+            _authorizationUserSessionManager = new SessionManager<AuthorizationUser>(redis);
             _smsVerificationSession = new SessionManager<string>(redis);
             _tokenVerificationSession = new SessionManager<dynamic>(redis);
         }
@@ -46,26 +47,23 @@ namespace Multi.Language.Application.Authorization
             return userRoles.Any(i => i == CurrentUser.UserRole);
         }
 
-        public string Login(AuthorizationUser user)
+        public async Task<string> LoginAsync(AuthorizationUser user)
         {
             if (user == null)
             {
                 return "";
             }
+
             SessionId = GenerateSessionId();
             var key = $"{SessionIdPrefix}{SessionId}_user";
 
-            SetUser(key, user);
-            if (AuthorizationUser.IsEmpty(GetUser(key)))
-            {
-                return "";
-            }
-            return SessionId;
+            var authorizationUser = await SetUserAsync(key, user);
+            return AuthorizationUser.IsEmpty(authorizationUser) ? "" : SessionId;
         }
 
-        public bool LogOut(string sessionId)
+        public async Task<bool> LogOutAsync(string sessionId)
         {
-            return _redisManager.DeleteSession(SessionIdPrefix, sessionId);
+            return await _authorizationUserSessionManager.DeleteSessionAsync(SessionIdPrefix, sessionId);
         }
 
         public bool SaveVerifyCode(string smsCode)
@@ -128,13 +126,15 @@ namespace Multi.Language.Application.Authorization
 
         private AuthorizationUser GetUser(string key)
         {
-            var authorizationUser = _redisManager[key];
+            var authorizationUser = _authorizationUserSessionManager.GetSession(key);
             return authorizationUser;
         }
 
-        private void SetUser(string key, AuthorizationUser user)
+        private async Task<AuthorizationUser> SetUserAsync(string key, AuthorizationUser user)
         {
-            _redisManager[key] = user;
+            await _authorizationUserSessionManager.SetSessionAsync(key, user);
+            var authorizationUser = await _authorizationUserSessionManager.GetSessionAsync(key);
+            return authorizationUser;
         }
 
         private string GenerateSessionId()

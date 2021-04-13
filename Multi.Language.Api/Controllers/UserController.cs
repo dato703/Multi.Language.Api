@@ -34,7 +34,7 @@ namespace Multi.Language.Api.Controllers
 
         [HttpGet]
         [Route("details/{id}")]
-        [AuthorizedUserRole(UserRole.User, UserRole.Administrator)]
+        [AuthorizedUserRole(UserRole.User, UserRole.Administrator, UserRole.SuperAdministrator)]
         public async Task<IActionResult> Details(Guid id)
         {
             var query = new GetUserByIdQuery(id);
@@ -44,7 +44,7 @@ namespace Multi.Language.Api.Controllers
 
         [HttpPost]
         [Route("create")]
-        [AuthorizedUserRole(UserRole.User, UserRole.Administrator)]
+        [AuthorizedUserRole(UserRole.Administrator, UserRole.SuperAdministrator)]
         public async Task<IActionResult> Create([FromBody] UserCreateViewModel viewModel)
         {
             var command = new CreateUserCommand(viewModel);
@@ -54,7 +54,7 @@ namespace Multi.Language.Api.Controllers
 
         [HttpGet]
         [Route("user-fro-update/{id}")]
-        [AuthorizedUserRole(UserRole.User, UserRole.Administrator)]
+        [AuthorizedUserRole(UserRole.Administrator, UserRole.SuperAdministrator)]
         public async Task<IActionResult> GetUserForUpdate(Guid id)
         {
             var query = new GetUserForUpdateQuery(id);
@@ -66,7 +66,7 @@ namespace Multi.Language.Api.Controllers
 
         [HttpPost]
         [Route("update")]
-        [AuthorizedUserRole(UserRole.User, UserRole.Administrator)]
+        [AuthorizedUserRole(UserRole.Administrator, UserRole.SuperAdministrator)]
         public async Task<IActionResult> Update([FromBody] UpdateUserViewModel viewModel)
         {
             var command = new UpdateUserCommand(viewModel);
