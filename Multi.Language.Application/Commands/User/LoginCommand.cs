@@ -1,17 +1,21 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using App.Core;
 using Multi.Language.Application.Authorization;
 using Multi.Language.Application.ViewModels.User;
+using Newtonsoft.Json;
 
 namespace Multi.Language.Application.Commands.User
 {
     public class LoginCommand : CommandBase
     {
         private readonly LoginViewModel _loginViewModel;
+        private readonly string _ipAddress;
 
-        public LoginCommand(LoginViewModel loginViewModel)
+        public LoginCommand(LoginViewModel loginViewModel, string ipAddress)
         {
             _loginViewModel = loginViewModel;
+            _ipAddress = ipAddress;
         }
         internal override async Task Execute()
         {
@@ -36,11 +40,31 @@ namespace Multi.Language.Application.Commands.User
             {
                 Id = user.Id,
                 UserName = user.UserName,
+                Email = user.Email,
                 UserRole = user.UserRole,
-                LocalIpAddress = "",
+                LocalIpAddress = _loginViewModel.Browser.Ips.Count > 0 ? _loginViewModel.Browser.Ips[0] : "",
             };
 
-            var sessionId =AuthorizationService.Login(authorizationUser);
+            var sessionId = AuthorizationService.Login(authorizationUser);
+
+            if (_loginViewModel.Browser.BrowserId == null || _loginViewModel.Browser.BrowserId == Guid.Empty)
+            {
+                _loginViewModel.Browser.BrowserId=Guid.NewGuid();
+            }
+
+            if (!string.IsNullOrWhiteSpace(sessionId))
+            {
+                HttpResult.Parameters.Add("session-id", sessionId);
+                HttpResult.Parameters.Add("login-name", authorizationUser.UserName);
+                HttpResult.Parameters.Add("browser-id", _loginViewModel.Browser.BrowserId);
+                HttpResult.Parameters.Add("authorized-user", JsonConvert.SerializeObject(new
+                {
+                    authorizationUser.Id,
+                    authorizationUser.Email,
+                    authorizationUser.UserName,
+                    authorizationUser.UserRole,
+                }));
+            }
 
             HttpResult = string.IsNullOrEmpty(sessionId) ? HttpResult.Error() : HttpResult.Successful();
         }

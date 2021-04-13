@@ -9,7 +9,7 @@ namespace Multi.Language.Application.Authorization
 {
     public class AuthorizationService : IAuthorizationService
     {
-        private const string SessionIdPrefix = "user_session_id";
+        private const string SessionIdPrefix = "user_session_id_";
         private const string SessionIdSalt = "TRR34K)#4j54hH=--*dd?UU=>>FF#22vOOIH";
         private AuthorizationUser _currentUser;
         private readonly SessionManager<AuthorizationUser> _redisManager;
@@ -36,7 +36,7 @@ namespace Multi.Language.Application.Authorization
                     return _currentUser;
                 }
 
-                var key = $"{SessionIdPrefix}{SessionId}_cis_user";
+                var key = $"{SessionIdPrefix}{SessionId}_user";
                 _currentUser = GetUser(key);
                 return _currentUser;
             }
@@ -53,7 +53,7 @@ namespace Multi.Language.Application.Authorization
                 return "";
             }
             SessionId = GenerateSessionId();
-            var key = $"{SessionIdPrefix}{SessionId}_cis_user";
+            var key = $"{SessionIdPrefix}{SessionId}_user";
 
             SetUser(key, user);
             if (AuthorizationUser.IsEmpty(GetUser(key)))
@@ -91,7 +91,7 @@ namespace Multi.Language.Application.Authorization
             var getCode = _smsVerificationSession.GetSession(key);
             if (getCode == sha256)
             {
-                _smsVerificationSession.DeleteSession("cis_sms_", SessionId);
+                _smsVerificationSession.DeleteSession("sms_", SessionId);
                 return true;
             }
 
@@ -128,7 +128,8 @@ namespace Multi.Language.Application.Authorization
 
         private AuthorizationUser GetUser(string key)
         {
-            return _redisManager[key];
+            var authorizationUser = _redisManager[key];
+            return authorizationUser;
         }
 
         private void SetUser(string key, AuthorizationUser user)

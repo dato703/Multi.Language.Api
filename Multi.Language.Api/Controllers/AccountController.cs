@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using App.Core;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Multi.Language.Api.Authorization;
 using Multi.Language.Application.Commands;
@@ -17,7 +18,7 @@ namespace Multi.Language.Api.Controllers
     public class AccountController : BaseController
     {
 
-        public AccountController(CommandProcessor commandProcessor, QueryProcessor queryProcessor, IAuthorizationService authorizationService) : base(commandProcessor, queryProcessor, authorizationService)
+        public AccountController(CommandProcessor commandProcessor, QueryProcessor queryProcessor, IAuthorizationService authorizationService, IHttpContextAccessor httpContextAccessor) : base(commandProcessor, queryProcessor, authorizationService, httpContextAccessor)
         {
 
         }
@@ -28,7 +29,7 @@ namespace Multi.Language.Api.Controllers
         {
             try
             {
-                if (!Request.Headers.TryGetValue("cis-session-id", out var values))
+                if (!Request.Headers.TryGetValue("session-id", out var values))
                 {
                     return Ok(new HttpResult { Status = HttpResultStatus.Unauthorized });
                 }
@@ -50,7 +51,7 @@ namespace Multi.Language.Api.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
-            var command = new LoginCommand(model);
+            var command = new LoginCommand(model,IpAddress);
             await CommandProcessor.Execute(command);
             return Ok(command.HttpResult);
         }

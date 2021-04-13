@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using App.Core;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Multi.Language.Api.Authorization;
 using Multi.Language.Application.Commands;
@@ -17,7 +18,7 @@ namespace Multi.Language.Api.Controllers
     [ApiController]
     public class UserController : BaseController
     {
-        public UserController(CommandProcessor commandProcessor, QueryProcessor queryProcessor, IAuthorizationService authorizationService) : base(commandProcessor, queryProcessor, authorizationService)
+        public UserController(CommandProcessor commandProcessor, QueryProcessor queryProcessor, IAuthorizationService authorizationService, IHttpContextAccessor httpContextAccessor) : base(commandProcessor, queryProcessor, authorizationService, httpContextAccessor)
         {
         }
 
