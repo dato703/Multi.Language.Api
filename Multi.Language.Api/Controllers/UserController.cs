@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Threading.Tasks;
 using App.Core;
-using Microsoft.AspNetCore.Http;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Multi.Language.Api.Authorization;
-using Multi.Language.Application.Commands;
 using Multi.Language.Application.Commands.User;
-using Multi.Language.Application.Queries;
 using Multi.Language.Application.Queries.User;
-using Multi.Language.Application.ViewModels.User;
 using Multi.Language.Domain.UserAggregate;
-using Multi.Language.Application.Authorization;
 
 namespace Multi.Language.Api.Controllers
 {
     [Route("api/user")]
     [ApiController]
-    public class UserController : BaseController
+    public class UserController : ControllerBase
     {
-        public UserController(CommandProcessor commandProcessor, QueryProcessor queryProcessor, IAuthorizationService authorizationService, IHttpContextAccessor httpContextAccessor) : base(commandProcessor, queryProcessor, authorizationService, httpContextAccessor)
+        private readonly IMediator _mediator;
+
+        public UserController(IMediator mediator)
         {
+            _mediator = mediator;
         }
 
         [HttpGet]
@@ -27,8 +26,8 @@ namespace Multi.Language.Api.Controllers
         public async Task<IActionResult> GetAllUsers()
         {
             var query = new GetUsersQuery();
-            var viewModel = await QueryProcessor.Execute(query);
-            var result = new HttpResult("users", viewModel, query.HttpResult);
+            var users = await _mediator.Send(query);
+            var result = new HttpResult("users", users);
             return Ok(result);
         }
 
@@ -38,18 +37,17 @@ namespace Multi.Language.Api.Controllers
         public async Task<IActionResult> Details(Guid id)
         {
             var query = new GetUserByIdQuery(id);
-            var viewModel = await QueryProcessor.Execute(query);
-            return Ok(new HttpResult("user", viewModel, query.HttpResult));
+            var user = await _mediator.Send(query);
+            return Ok(new HttpResult("user", user));
         }
 
         [HttpPost]
         [Route("create")]
         [AuthorizedUserRole(UserRole.Administrator, UserRole.SuperAdministrator)]
-        public async Task<IActionResult> Create([FromBody] UserCreateViewModel viewModel)
+        public async Task<IActionResult> Create([FromBody] CreateUserCommand command)
         {
-            var command = new CreateUserCommand(viewModel);
-            await CommandProcessor.Execute(command);
-            return Ok(command.HttpResult);
+            var userId = await _mediator.Send(command);
+            return Ok(userId);
         }
 
         [HttpGet]
@@ -58,20 +56,18 @@ namespace Multi.Language.Api.Controllers
         public async Task<IActionResult> GetUserForUpdate(Guid id)
         {
             var query = new GetUserForUpdateQuery(id);
-            var viewModel = await QueryProcessor.Execute(query);
-            query.HttpResult.AddParameter("user", viewModel);
-            return Ok(query.HttpResult);
+            var user = await _mediator.Send(query);
+            return Ok(new HttpResult("user", user));
         }
 
 
         [HttpPost]
         [Route("update")]
         [AuthorizedUserRole(UserRole.Administrator, UserRole.SuperAdministrator)]
-        public async Task<IActionResult> Update([FromBody] UpdateUserViewModel viewModel)
+        public async Task<IActionResult> Update([FromBody] UpdateUserCommand command)
         {
-            var command = new UpdateUserCommand(viewModel);
-            await CommandProcessor.Execute(command);
-            return Ok(command.HttpResult);
+            await _mediator.Send(command);
+            return Ok();
         }
 
         [HttpPost]
@@ -80,8 +76,8 @@ namespace Multi.Language.Api.Controllers
         public async Task<IActionResult> DeleteConfirmed([FromBody] Guid userId)
         {
             var command = new DeleteUserCommand(userId);
-            await CommandProcessor.Execute(command);
-            return Ok(command.HttpResult);
+            await _mediator.Send(command);
+            return Ok();
         }
     }
 }

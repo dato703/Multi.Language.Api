@@ -20,6 +20,11 @@ namespace App.Core
             Message = message;
         }
 
+        public HttpResult(string parameterName, object data)
+        {
+            Parameters = new Dictionary<string, object> { { parameterName, data } };
+        }
+
         public HttpResult(string parameterName, object data, HttpResult result)
         {
             if (result.Parameters.Any())

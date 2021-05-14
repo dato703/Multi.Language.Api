@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Threading.Tasks;
 using App.Core;
-using Microsoft.AspNetCore.Http;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Multi.Language.Api.Authorization;
-using Multi.Language.Application.Commands;
-using Multi.Language.Application.Queries;
-using Multi.Language.Application.ViewModels.User;
 using Multi.Language.Application.Authorization;
-using Multi.Language.Application.Commands.User;
+using Multi.Language.Application.Commands.Account;
 using Multi.Language.Domain.UserAggregate;
 
 namespace Multi.Language.Api.Controllers
 {
     [Route("api/account")]
     [ApiController]
-    public class AccountController : BaseController
+    public class AccountController : ControllerBase
     {
+        private readonly IMediator _mediator;
+        private readonly IAuthorizationService _authorizationService;
 
-        public AccountController(CommandProcessor commandProcessor, QueryProcessor queryProcessor, IAuthorizationService authorizationService, IHttpContextAccessor httpContextAccessor) : base(commandProcessor, queryProcessor, authorizationService, httpContextAccessor)
+        public AccountController(IMediator mediator,IAuthorizationService authorizationService)
         {
-
+            _mediator = mediator;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet]
@@ -34,10 +34,10 @@ namespace Multi.Language.Api.Controllers
                     return Ok(new HttpResult { Status = HttpResultStatus.Unauthorized });
                 }
 
-                AuthorizationService.SessionId = values[0];
+                _authorizationService.SessionId = values[0];
                 var result = new HttpResult()
                 {
-                    Status = AuthorizationService.IsAuthorized ? HttpResultStatus.Success : HttpResultStatus.Unauthorized
+                    Status = _authorizationService.IsAuthorized ? HttpResultStatus.Success : HttpResultStatus.Unauthorized
                 };
                 return Ok(result);
             }
@@ -49,11 +49,10 @@ namespace Multi.Language.Api.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
+        public async Task<IActionResult> Login([FromBody] LoginCommand command)
         {
-            var command = new LoginCommand(model);
-            await CommandProcessor.Execute(command);
-            return Ok(command.HttpResult);
+            var result=await _mediator.Send(command);
+            return Ok(result);
         }
 
         [HttpPost]
@@ -73,9 +72,9 @@ namespace Multi.Language.Api.Controllers
             }
 
             var logoutCommand = new LogoutCommand(sessionId);
-            await CommandProcessor.Execute(logoutCommand);
+            var result = await _mediator.Send(logoutCommand);
 
-            return Ok(logoutCommand.HttpResult);
+            return Ok(result);
         }
     }
 }

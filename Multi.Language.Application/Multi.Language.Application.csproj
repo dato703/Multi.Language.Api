@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.2.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Multi.Language.Domain\Multi.Language.Domain.csproj" />
     <ProjectReference Include="..\Multi.Language.Infrastructure\Multi.Language.Infrastructure.csproj" />
   </ItemGroup>

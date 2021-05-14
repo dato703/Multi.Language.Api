@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,10 @@ using Multi.Language.Domain.UserAggregate;
 using Multi.Language.Infrastructure;
 using Multi.Language.Infrastructure.Redis;
 using Multi.Language.Infrastructure.Repositories;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Multi.Language.Application;
+using Multi.Language.Application.Configuration;
 
 namespace Multi.Language.Api
 {
@@ -27,7 +32,7 @@ namespace Multi.Language.Api
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public virtual IServiceProvider ConfigureServices(IServiceCollection services)
         {
 
             services.AddControllers();
@@ -39,8 +44,14 @@ namespace Multi.Language.Api
             services.AddScoped<IAuthorizationService, AuthorizationService>();
             services.AddScoped<CommandProcessor>();
             services.AddScoped<QueryProcessor>();
+            services.AddScoped<RequestProcessor>();
             services.AddRedis(Configuration);
             services.AddDatabase(Configuration);
+
+            var container = new ContainerBuilder();
+            container.Populate(services);
+            container.RegisterModule(new MediatorModule());
+            return new AutofacServiceProvider(container.Build());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

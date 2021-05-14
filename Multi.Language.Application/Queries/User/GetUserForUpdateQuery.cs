@@ -1,30 +1,16 @@
 ﻿using System;
-using System.Threading.Tasks;
-using App.Core;
+using MediatR;
 using Multi.Language.Application.ViewModels.User;
 
 namespace Multi.Language.Application.Queries.User
 {
-    public class GetUserForUpdateQuery:QueryBase<UpdateUserViewModel>
+    public class GetUserForUpdateQuery: IRequest<UpdateUserViewModel>
     {
-        private readonly Guid _userId;
-
         public GetUserForUpdateQuery(Guid userId)
         {
-            _userId = userId;
+            UserId = userId;
         }
-        internal override async Task<UpdateUserViewModel> Execute()
-        {
-            var user = await UnitOfWork.UserRepository.FindAsync(x => x.Id == _userId);
 
-            if (user == null)
-            {
-                throw new DomainException("User not found", ExceptionLevel.Error);
-            }
-
-            var result = new UpdateUserViewModel(user.Id, user.Password, user.Email);
-
-            return result;
-        }
+        public Guid UserId { get; private set; }
     }
 }

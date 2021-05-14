@@ -1,9 +1,10 @@
 ﻿using System;
 using App.Core;
+using Multi.Language.Domain.Events.User;
 
 namespace Multi.Language.Domain.UserAggregate
 {
-    public class User : AggregateRoot<Guid>
+    public class User : Entity<Guid>, IAggregateRoot
     {
         public string UserName { get; private set; }
         public string Password { get; private set; }
@@ -16,11 +17,13 @@ namespace Multi.Language.Domain.UserAggregate
             Password = password;
             Email = email;
             UserRole = userRole;
+            AddDomainEvent(new CreateUserDomainEvent(this));
         }
         public void Update(string password, string email)
         {
             Password = password;
             Email = email;
+            AddDomainEvent(new UpdateUserDomainEvent(Id, password, email));
         }
 
     }

@@ -1,28 +1,19 @@
-﻿using System.Threading.Tasks;
-using App.Core;
-using Multi.Language.Application.ViewModels.User;
-using Multi.Language.Domain.UserAggregate;
+﻿using System;
+using MediatR;
 
 namespace Multi.Language.Application.Commands.User
 {
-    public class CreateUserCommand : CommandBase
+    public class CreateUserCommand : IRequest<Guid>
     {
-        private readonly UserCreateViewModel _userViewModel;
-
-        public CreateUserCommand(UserCreateViewModel userViewModel)
+        public CreateUserCommand(string userName, string password, string email)
         {
-            _userViewModel = userViewModel;
+            UserName = userName;
+            Password = password;
+            Email = email;
         }
-        internal override async Task Execute()
-        {
-            var user = new Domain.UserAggregate.User();
-            user.Create(_userViewModel.UserName, _userViewModel.Password, _userViewModel.Email, UserRole.User);
-            //user.Validate();
-            await UnitOfWork.UserRepository.AddAsync(user);
-            await UnitOfWork.CompleteAsync();
 
-            HttpResult.Successful("User Registered");
-            HttpResult.AddParameter("user-id", user.Id);
-        }
+        public string UserName { get; private set; }
+        public string Password { get; private set; }
+        public string Email { get; private set; }
     }
 }
