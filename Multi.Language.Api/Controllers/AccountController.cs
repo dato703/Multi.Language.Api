@@ -19,7 +19,7 @@ namespace Multi.Language.Api.Controllers
         private readonly IAuthorizationService _authorizationService;
         private readonly RequestProcessor _requestProcessor;
 
-        public AccountController(IMediator mediator,IAuthorizationService authorizationService, RequestProcessor requestProcessor)
+        public AccountController(IMediator mediator, IAuthorizationService authorizationService, RequestProcessor requestProcessor)
         {
             _mediator = mediator;
             _authorizationService = authorizationService;
@@ -54,8 +54,8 @@ namespace Multi.Language.Api.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginCommand command)
         {
-            var result = _requestProcessor.Execute(command);
-            //var result=await _mediator.Send(command);
+            var result = await _requestProcessor.Execute(command);
+            _requestProcessor.HttpResult.AddParameter("login-data", result);
             return Ok(_requestProcessor.HttpResult);
         }
 

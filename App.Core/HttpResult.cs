@@ -72,7 +72,6 @@ namespace App.Core
         public static HttpResult AddParameter(this HttpResult httpResult, string parameterName, object data)
         {
             httpResult.Parameters.Add(parameterName, data);
-            httpResult.Status = HttpResultStatus.Success;
             return httpResult;
         }
         public static HttpResult Successful(this HttpResult httpResult)

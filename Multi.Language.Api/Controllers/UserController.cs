@@ -23,6 +23,7 @@ namespace Multi.Language.Api.Controllers
 
         [HttpGet]
         [Route("all")]
+        [AuthorizedUserRole(UserRole.User, UserRole.Administrator, UserRole.SuperAdministrator)]
         public async Task<IActionResult> GetAllUsers()
         {
             var query = new GetUsersQuery();
