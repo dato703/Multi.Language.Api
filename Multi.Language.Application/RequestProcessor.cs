@@ -21,22 +21,17 @@ namespace Multi.Language.Application
             {
                 var result = await _mediator.Send(request);
 
-                HttpResult = HttpResult.Successful();
+                HttpResult.Successful();
 
                 return result;
             }
             catch (DomainException domainException)
             {
-                HttpResult = HttpResult.Error(domainException.Message);
+                HttpResult.Error(domainException.Message);
             }
             catch (Exception e)
             {
-                HttpResult = HttpResult.Error("სისტემური შეცდომა. " + e.Message);
-
-            }
-            finally
-            {
-
+                HttpResult.Error("სისტემური შეცდომა. " + e.Message);
             }
 
             return default(T);

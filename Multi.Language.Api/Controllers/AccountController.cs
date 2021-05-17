@@ -4,6 +4,7 @@ using App.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Multi.Language.Api.Authorization;
+using Multi.Language.Application;
 using Multi.Language.Application.Authorization;
 using Multi.Language.Application.Commands.Account;
 using Multi.Language.Domain.UserAggregate;
@@ -16,11 +17,13 @@ namespace Multi.Language.Api.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IAuthorizationService _authorizationService;
+        private readonly RequestProcessor _requestProcessor;
 
-        public AccountController(IMediator mediator,IAuthorizationService authorizationService)
+        public AccountController(IMediator mediator,IAuthorizationService authorizationService, RequestProcessor requestProcessor)
         {
             _mediator = mediator;
             _authorizationService = authorizationService;
+            _requestProcessor = requestProcessor;
         }
 
         [HttpGet]
@@ -51,8 +54,9 @@ namespace Multi.Language.Api.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginCommand command)
         {
-            var result=await _mediator.Send(command);
-            return Ok(result);
+            var result = _requestProcessor.Execute(command);
+            //var result=await _mediator.Send(command);
+            return Ok(_requestProcessor.HttpResult);
         }
 
         [HttpPost]
