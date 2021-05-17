@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using App.Core;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Multi.Language.Api.Authorization;
 using Multi.Language.Application;
@@ -15,15 +14,13 @@ namespace Multi.Language.Api.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IMediator _mediator;
-        private readonly IAuthorizationService _authorizationService;
         private readonly RequestProcessor _requestProcessor;
+        private readonly IAuthorizationService _authorizationService;
 
-        public AccountController(IMediator mediator, IAuthorizationService authorizationService, RequestProcessor requestProcessor)
+        public AccountController(RequestProcessor requestProcessor,IAuthorizationService authorizationService)
         {
-            _mediator = mediator;
-            _authorizationService = authorizationService;
             _requestProcessor = requestProcessor;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet]
@@ -76,7 +73,7 @@ namespace Multi.Language.Api.Controllers
             }
 
             var logoutCommand = new LogoutCommand(sessionId);
-            var result = await _mediator.Send(logoutCommand);
+            var result = await _requestProcessor.Execute(logoutCommand);
 
             return Ok(result);
         }

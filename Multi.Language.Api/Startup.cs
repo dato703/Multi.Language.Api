@@ -8,8 +8,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Multi.Language.Api.Configuration;
 using Multi.Language.Application.Authorization;
-using Multi.Language.Application.Commands;
-using Multi.Language.Application.Queries;
 using Multi.Language.Domain.SeedWork;
 using Multi.Language.Domain.UserAggregate;
 using Multi.Language.Infrastructure;
@@ -42,8 +40,6 @@ namespace Multi.Language.Api
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRedisManager, RedisManager>();
             services.AddScoped<IAuthorizationService, AuthorizationService>();
-            services.AddScoped<CommandProcessor>();
-            services.AddScoped<QueryProcessor>();
             services.AddScoped<RequestProcessor>();
             services.AddRedis(Configuration);
             services.AddDatabase(Configuration);

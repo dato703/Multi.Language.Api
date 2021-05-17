@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using App.Core;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Multi.Language.Api.Authorization;
+using Multi.Language.Application;
 using Multi.Language.Application.Commands.User;
 using Multi.Language.Application.Queries.User;
 using Multi.Language.Domain.UserAggregate;
@@ -14,11 +14,11 @@ namespace Multi.Language.Api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly RequestProcessor _requestProcessor;
 
-        public UserController(IMediator mediator)
+        public UserController(RequestProcessor requestProcessor)
         {
-            _mediator = mediator;
+            _requestProcessor = requestProcessor;
         }
 
         [HttpGet]
@@ -27,9 +27,9 @@ namespace Multi.Language.Api.Controllers
         public async Task<IActionResult> GetAllUsers()
         {
             var query = new GetUsersQuery();
-            var users = await _mediator.Send(query);
-            var result = new HttpResult("users", users);
-            return Ok(result);
+            var users = await _requestProcessor.Execute(query);
+            _requestProcessor.HttpResult.AddParameter("users", users);
+            return Ok(_requestProcessor.HttpResult);
         }
 
         [HttpGet]
@@ -38,8 +38,9 @@ namespace Multi.Language.Api.Controllers
         public async Task<IActionResult> Details(Guid id)
         {
             var query = new GetUserByIdQuery(id);
-            var user = await _mediator.Send(query);
-            return Ok(new HttpResult("user", user));
+            var user = await _requestProcessor.Execute(query);
+            _requestProcessor.HttpResult.AddParameter("user", user);
+            return Ok(_requestProcessor.HttpResult);
         }
 
         [HttpPost]
@@ -47,8 +48,9 @@ namespace Multi.Language.Api.Controllers
         [AuthorizedUserRole(UserRole.Administrator, UserRole.SuperAdministrator)]
         public async Task<IActionResult> Create([FromBody] CreateUserCommand command)
         {
-            var userId = await _mediator.Send(command);
-            return Ok(userId);
+            var userId = await _requestProcessor.Execute(command);
+            _requestProcessor.HttpResult.AddParameter("userId", userId);
+            return Ok(_requestProcessor.HttpResult);
         }
 
         [HttpGet]
@@ -57,8 +59,9 @@ namespace Multi.Language.Api.Controllers
         public async Task<IActionResult> GetUserForUpdate(Guid id)
         {
             var query = new GetUserForUpdateQuery(id);
-            var user = await _mediator.Send(query);
-            return Ok(new HttpResult("user", user));
+            var user = await _requestProcessor.Execute(query);
+            _requestProcessor.HttpResult.AddParameter("user", user);
+            return Ok(_requestProcessor.HttpResult);
         }
 
 
@@ -67,8 +70,8 @@ namespace Multi.Language.Api.Controllers
         [AuthorizedUserRole(UserRole.Administrator, UserRole.SuperAdministrator)]
         public async Task<IActionResult> Update([FromBody] UpdateUserCommand command)
         {
-            await _mediator.Send(command);
-            return Ok();
+            await _requestProcessor.Execute(command);
+            return Ok(_requestProcessor.HttpResult);
         }
 
         [HttpPost]
@@ -77,8 +80,8 @@ namespace Multi.Language.Api.Controllers
         public async Task<IActionResult> DeleteConfirmed([FromBody] Guid userId)
         {
             var command = new DeleteUserCommand(userId);
-            await _mediator.Send(command);
-            return Ok();
+            await _requestProcessor.Execute(command);
+            return Ok(_requestProcessor.HttpResult);
         }
     }
 }
