@@ -18,6 +18,8 @@ namespace Multi.Language.Infrastructure
         {
             modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new EventQueueEntityTypeConfiguration());
+            modelBuilder.Seed();
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

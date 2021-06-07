@@ -17,8 +17,7 @@ namespace Multi.Language.Application.Commands.User
         }
         public async Task<Guid> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = new Domain.AggregatesModel.UserAggregate.User();
-            user.Create(request.UserName, request.Password, request.Email, UserRole.User);
+            var user = new Domain.AggregatesModel.UserAggregate.User(Guid.NewGuid(), request.UserName, request.Password, request.Email, UserRole.User);
             //user.Validate();
             await _unitOfWork.UserRepository.AddAsync(user);
             await _unitOfWork.CompleteAsync();
