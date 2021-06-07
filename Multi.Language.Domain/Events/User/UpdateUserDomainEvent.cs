@@ -1,9 +1,9 @@
 ﻿using System;
-using MediatR;
+using App.Core;
 
 namespace Multi.Language.Domain.Events.User
 {
-    public class UpdateUserDomainEvent : INotification
+    public class UpdateUserDomainEvent : DomainEvent
     {
         public UpdateUserDomainEvent(Guid userId, string password, string email)
         {

@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Multi.Language.Domain.AggregatesModel.UserAggregate;
 using Multi.Language.Domain.SeedWork;
-using Multi.Language.Domain.UserAggregate;
 
 namespace Multi.Language.Application.Commands.User
 {
@@ -17,7 +17,7 @@ namespace Multi.Language.Application.Commands.User
         }
         public async Task<Guid> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = new Domain.UserAggregate.User();
+            var user = new Domain.AggregatesModel.UserAggregate.User();
             user.Create(request.UserName, request.Password, request.Email, UserRole.User);
             //user.Validate();
             await _unitOfWork.UserRepository.AddAsync(user);

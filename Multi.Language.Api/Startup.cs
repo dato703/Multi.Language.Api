@@ -9,7 +9,6 @@ using Microsoft.Extensions.Hosting;
 using Multi.Language.Api.Configuration;
 using Multi.Language.Application.Authorization;
 using Multi.Language.Domain.SeedWork;
-using Multi.Language.Domain.UserAggregate;
 using Multi.Language.Infrastructure;
 using Multi.Language.Infrastructure.Redis;
 using Multi.Language.Infrastructure.Repositories;
@@ -17,6 +16,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Multi.Language.Application;
 using Multi.Language.Application.Configuration;
+using Multi.Language.Domain.AggregatesModel.UserAggregate;
 
 namespace Multi.Language.Api
 {

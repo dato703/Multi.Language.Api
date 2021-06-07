@@ -1,22 +1,21 @@
 ﻿using System.Collections.Generic;
-using MediatR;
 using Newtonsoft.Json;
 
 namespace App.Core
 {
     public class Entity
     {
-        private List<INotification> _domainEvents;
+        private List<DomainEvent> _domainEvents;
         [JsonIgnore]
-        public IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();
+        public IReadOnlyCollection<DomainEvent> DomainEvents => _domainEvents?.AsReadOnly();
 
-        public void AddDomainEvent(INotification eventItem)
+        public void AddDomainEvent(DomainEvent eventItem)
         {
-            _domainEvents ??= new List<INotification>();
+            _domainEvents ??= new List<DomainEvent>();
             _domainEvents.Add(eventItem);
         }
 
-        public void RemoveDomainEvent(INotification eventItem)
+        public void RemoveDomainEvent(DomainEvent eventItem)
         {
             _domainEvents?.Remove(eventItem);
         }

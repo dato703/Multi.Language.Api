@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Multi.Language.Domain.UserAggregate;
+using Multi.Language.Domain.AggregatesModel.UserAggregate;
 
 namespace Multi.Language.Application.Authorization
 {

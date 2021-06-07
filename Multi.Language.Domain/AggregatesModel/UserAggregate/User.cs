@@ -2,7 +2,7 @@
 using App.Core;
 using Multi.Language.Domain.Events.User;
 
-namespace Multi.Language.Domain.UserAggregate
+namespace Multi.Language.Domain.AggregatesModel.UserAggregate
 {
     public class User : Entity<Guid>, IAggregateRoot
     {

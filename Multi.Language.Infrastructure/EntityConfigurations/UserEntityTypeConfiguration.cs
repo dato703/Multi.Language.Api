@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Multi.Language.Domain.UserAggregate;
+using Multi.Language.Domain.AggregatesModel.UserAggregate;
 
 namespace Multi.Language.Infrastructure.EntityConfigurations
 {

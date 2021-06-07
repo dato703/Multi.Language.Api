@@ -1,4 +1,4 @@
-﻿namespace Multi.Language.Domain.UserAggregate
+﻿namespace Multi.Language.Domain.AggregatesModel.UserAggregate
 {
     public enum UserRole
     {

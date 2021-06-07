@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using App.Core.Utils;
-using Multi.Language.Domain.UserAggregate;
+using Multi.Language.Domain.AggregatesModel.UserAggregate;
 using Multi.Language.Infrastructure.Redis;
 
 namespace Multi.Language.Application.Authorization

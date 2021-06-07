@@ -2,8 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Multi.Language.Domain.AggregatesModel.UserAggregate;
 using Multi.Language.Domain.SeedWork;
-using Multi.Language.Domain.UserAggregate;
+using Multi.Language.Infrastructure.EventSourcing;
 using Multi.Language.Infrastructure.Repositories;
 
 namespace Multi.Language.Infrastructure
@@ -11,9 +12,12 @@ namespace Multi.Language.Infrastructure
     public class UnitOfWork : IUnitOfWork
     {
         protected UserContext Context;
-        public UnitOfWork(UserContext context)
+        private readonly IDomainEventHandler _domainEventHandler;
+
+        public UnitOfWork(UserContext context, IDomainEventHandler domainEventHandler)
         {
             Context = context;
+            _domainEventHandler = domainEventHandler;
         }
         public IUserRepository UserRepository => new UserRepository(Context);
         public async Task UseTransaction(Action action)
@@ -42,6 +46,8 @@ namespace Multi.Language.Infrastructure
 
         public virtual async Task<int> CompleteAsync()
         {
+            await _domainEventHandler.DispatchDomainEventsAsync(Context).ConfigureAwait(false);
+
             return await Context.SaveChangesAsync();
         }
 

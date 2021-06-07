@@ -1,4 +1,4 @@
-﻿using Multi.Language.Domain.UserAggregate;
+﻿using Multi.Language.Domain.AggregatesModel.UserAggregate;
 
 namespace Multi.Language.Infrastructure.Repositories
 {

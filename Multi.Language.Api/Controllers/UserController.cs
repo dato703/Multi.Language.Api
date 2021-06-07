@@ -6,7 +6,7 @@ using Multi.Language.Api.Authorization;
 using Multi.Language.Application;
 using Multi.Language.Application.Commands.User;
 using Multi.Language.Application.Queries.User;
-using Multi.Language.Domain.UserAggregate;
+using Multi.Language.Domain.AggregatesModel.UserAggregate;
 
 namespace Multi.Language.Api.Controllers
 {

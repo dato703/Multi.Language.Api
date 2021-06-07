@@ -4,7 +4,7 @@ using App.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Multi.Language.Application.Authorization;
-using Multi.Language.Domain.UserAggregate;
+using Multi.Language.Domain.AggregatesModel.UserAggregate;
 
 namespace Multi.Language.Api.Authorization
 {

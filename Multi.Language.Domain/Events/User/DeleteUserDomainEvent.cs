@@ -1,8 +1,8 @@
-﻿using MediatR;
+﻿using App.Core;
 
 namespace Multi.Language.Domain.Events.User
 {
-    public class DeleteUserDomainEvent : INotification
+    public class DeleteUserDomainEvent : DomainEvent
     {
     }
 }

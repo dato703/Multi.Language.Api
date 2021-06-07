@@ -1,14 +1,14 @@
-﻿using MediatR;
+﻿using App.Core;
 
 namespace Multi.Language.Domain.Events.User
 {
-    public class CreateUserDomainEvent: INotification
+    public class CreateUserDomainEvent : DomainEvent
     {
-        public CreateUserDomainEvent(UserAggregate.User user)
+        public CreateUserDomainEvent(AggregatesModel.UserAggregate.User user)
         {
             User = user;
         }
 
-        public UserAggregate.User User { get; }
+        public AggregatesModel.UserAggregate.User User { get; }
     }
 }
