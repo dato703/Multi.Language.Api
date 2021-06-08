@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using App.Core;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Multi.Language.Api.Authorization;
 using Multi.Language.Application;
@@ -12,15 +13,11 @@ namespace Multi.Language.Api.Controllers
 {
     [Route("api/account")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountController : BaseController
     {
-        private readonly RequestProcessor _requestProcessor;
-        private readonly IAuthorizationService _authorizationService;
 
-        public AccountController(RequestProcessor requestProcessor,IAuthorizationService authorizationService)
+        public AccountController(RequestProcessor requestProcessor, IAuthorizationService authorizationService, IHttpContextAccessor httpContextAccessor) : base(requestProcessor, authorizationService, httpContextAccessor)
         {
-            _requestProcessor = requestProcessor;
-            _authorizationService = authorizationService;
         }
 
         [HttpGet]
@@ -34,10 +31,10 @@ namespace Multi.Language.Api.Controllers
                     return Ok(new HttpResult { Status = HttpResultStatus.Unauthorized });
                 }
 
-                _authorizationService.SessionId = values[0];
+                AuthorizationService.SessionId = values[0];
                 var result = new HttpResult()
                 {
-                    Status = _authorizationService.IsAuthorized ? HttpResultStatus.Success : HttpResultStatus.Unauthorized
+                    Status = AuthorizationService.IsAuthorized ? HttpResultStatus.Success : HttpResultStatus.Unauthorized
                 };
                 return Ok(result);
             }
@@ -51,9 +48,9 @@ namespace Multi.Language.Api.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginCommand command)
         {
-            var result = await _requestProcessor.Execute(command);
-            _requestProcessor.HttpResult.AddParameter("login-data", result);
-            return Ok(_requestProcessor.HttpResult);
+            var result = await RequestProcessor.Execute(command);
+            RequestProcessor.HttpResult.AddParameter("login-data", result);
+            return Ok(RequestProcessor.HttpResult);
         }
 
         [HttpPost]
@@ -73,7 +70,7 @@ namespace Multi.Language.Api.Controllers
             }
 
             var logoutCommand = new LogoutCommand(sessionId);
-            var result = await _requestProcessor.Execute(logoutCommand);
+            var result = await RequestProcessor.Execute(logoutCommand);
 
             return Ok(result);
         }

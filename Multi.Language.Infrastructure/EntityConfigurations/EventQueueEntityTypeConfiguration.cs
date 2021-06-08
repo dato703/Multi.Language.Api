@@ -12,7 +12,6 @@ namespace Multi.Language.Infrastructure.EntityConfigurations
             builder.ToTable("EventQueue", "es");
             builder.HasKey(x => x.Id);
             builder.Property(t => t.Id).HasColumnName("Id").ValueGeneratedOnAdd();
-            builder.Property(x => x.MessageType).HasColumnName("MessageType");
             builder.Property(x => x.Stream).HasColumnName("Stream");
             builder.Property(x => x.AggregateId).HasColumnName("AggregateId");
             builder.Property(x => x.TransactionId).HasColumnName("TransactionId");

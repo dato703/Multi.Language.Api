@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using App.Core;
 using MediatR;
@@ -34,7 +35,7 @@ namespace Multi.Language.Infrastructure.EventSourcing
                 //@event.UserId = _authorizationService.CurrentUserId;
 
                 var storedEvent = new EventQueue("", @event.AggregateRootId, @event.TransactionId,
-                    @event.MessageType, @event.EventDate, _authorizationService.CurrentUserId, "Ip", serializedData);
+                    @event.MessageType, @event.EventDate, _authorizationService.CurrentUserId, _authorizationService.IpAddress, serializedData);
 
                 _eventStoreRepository.Add(storedEvent);
 
@@ -55,8 +56,15 @@ namespace Multi.Language.Infrastructure.EventSourcing
             domainEntities.ToList()
                 .ForEach(entity => entity.Entity.ClearDomainEvents());
 
+
+            var transactionId = Guid.NewGuid();
+
             var tasks = domainEvents.Select(async (domainEvent) =>
             {
+                if (domainEvent.TransactionId == Guid.Empty)
+                {
+                    domainEvent.TransactionId = transactionId;
+                }
                 await PublishEventAsync(domainEvent);
             });
 

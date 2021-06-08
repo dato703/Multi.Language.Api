@@ -6,10 +6,9 @@ namespace App.Core
     public abstract class DomainEvent : INotification
     {
         public Guid AggregateRootId { get; protected set; }
-        public Guid TransactionId { get; protected set; }
-        public DateTimeOffset EventDate { get; protected set; }
-        public Guid UserId { get; protected set; }
-        public string MessageType { get; protected set; }
+        public Guid TransactionId { get; set; }
+        public DateTimeOffset EventDate { get; }
+        public string MessageType { get; }
 
         protected DomainEvent()
         {

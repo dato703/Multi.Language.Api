@@ -2,8 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Multi.Language.Api.Helpers;
-using Multi.Language.Application.Commands;
-using Multi.Language.Application.Queries;
+using Multi.Language.Application;
 using Multi.Language.Infrastructure.Authorization;
 
 namespace Multi.Language.Api.Controllers
@@ -12,16 +11,16 @@ namespace Multi.Language.Api.Controllers
     [ApiController]
     public class BaseController : ControllerBase
     {
-        protected readonly CommandProcessor CommandProcessor;
-        protected readonly QueryProcessor QueryProcessor;
+        protected readonly RequestProcessor RequestProcessor;
         protected readonly IAuthorizationService AuthorizationService;
         protected readonly IHttpContextAccessor HttpContextAccessor;
-        public BaseController(CommandProcessor commandProcessor, QueryProcessor queryProcessor, IAuthorizationService authorizationService, IHttpContextAccessor httpContextAccessor)
+        public BaseController(RequestProcessor requestProcessor, IAuthorizationService authorizationService, IHttpContextAccessor httpContextAccessor)
         {
-            CommandProcessor = commandProcessor;
-            QueryProcessor = queryProcessor;
-            AuthorizationService = authorizationService;
+            RequestProcessor = requestProcessor;
             HttpContextAccessor = httpContextAccessor;
+            AuthorizationService = authorizationService;
+            AuthorizationService.SessionId = SessionId;
+            AuthorizationService.IpAddress = IpAddress;
         }
         protected string IpAddress => GetClientIpAddress();
         private string SessionId
@@ -41,6 +40,9 @@ namespace Multi.Language.Api.Controllers
 
         protected string GetClientIpAddress()
         {
+            
+            //var ipAddress1= Request.HttpContext.Connection.RemoteIpAddress;
+
             var ipAddress = HttpContextAccessor.GetRequestIP();
 
             if (SessionId != null && AuthorizationService?.CurrentUser?.LocalIpAddress != null && IpHelper.ValidateIPv4(AuthorizationService?.CurrentUser?.LocalIpAddress) && ipAddress.ToLower().Trim().GetHashCode() != AuthorizationService?.CurrentUser?.LocalIpAddress?.ToLower().Trim().GetHashCode())

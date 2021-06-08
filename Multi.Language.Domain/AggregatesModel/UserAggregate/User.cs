@@ -11,6 +11,10 @@ namespace Multi.Language.Domain.AggregatesModel.UserAggregate
         public string Email { get; private set; }
         public UserRole UserRole { get; private set; }
 
+        public User()
+        {
+            
+        }
         public User(Guid id, string userName, string password, string email, UserRole userRole)
         {
             Id = id;

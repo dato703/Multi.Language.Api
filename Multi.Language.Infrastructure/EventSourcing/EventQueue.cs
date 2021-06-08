@@ -11,7 +11,6 @@ namespace Multi.Language.Infrastructure.EventSourcing
         }
         public EventQueue(string stream, Guid aggregateId, Guid transactionId, string eventName, DateTimeOffset eventDate, Guid? userId, string ipAddress, string data)
         {
-            MessageType = this.GetType().Name;
             Stream = stream;
             AggregateId = aggregateId;
             TransactionId = transactionId;
@@ -21,8 +20,7 @@ namespace Multi.Language.Infrastructure.EventSourcing
             IpAddress = ipAddress;
             Data = data;
         }
-
-        public string MessageType { get; private set; }
+        
         public string Stream { get; private set; }
         public Guid AggregateId { get; private set; }
         public Guid TransactionId { get; private set; }
