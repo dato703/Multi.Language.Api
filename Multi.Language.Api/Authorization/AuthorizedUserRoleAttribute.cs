@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using App.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Multi.Language.Application.Authorization;
 using Multi.Language.Domain.AggregatesModel.UserAggregate;
+using Multi.Language.Infrastructure.Authorization;
 
 namespace Multi.Language.Api.Authorization
 {

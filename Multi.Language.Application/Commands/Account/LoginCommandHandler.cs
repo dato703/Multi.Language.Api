@@ -3,8 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using App.Core;
 using MediatR;
-using Multi.Language.Application.Authorization;
 using Multi.Language.Domain.SeedWork;
+using Multi.Language.Infrastructure.Authorization;
 
 namespace Multi.Language.Application.Commands.Account
 {

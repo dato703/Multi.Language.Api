@@ -12,12 +12,12 @@ namespace Multi.Language.Infrastructure
     public class UnitOfWork : IUnitOfWork
     {
         protected UserContext Context;
-        private readonly IDomainEventHandler _domainEventHandler;
+        private readonly IDomainEventDispatcher _domainEventDispatcher;
 
-        public UnitOfWork(UserContext context, IDomainEventHandler domainEventHandler)
+        public UnitOfWork(UserContext context, IDomainEventDispatcher domainEventDispatcher)
         {
             Context = context;
-            _domainEventHandler = domainEventHandler;
+            _domainEventDispatcher = domainEventDispatcher;
         }
         public IUserRepository UserRepository => new UserRepository(Context);
         public async Task UseTransaction(Action action)
@@ -46,7 +46,7 @@ namespace Multi.Language.Infrastructure
 
         public virtual async Task<int> CompleteAsync()
         {
-            await _domainEventHandler.DispatchDomainEventsAsync(Context).ConfigureAwait(false);
+            await _domainEventDispatcher.DispatchDomainEventsAsync(Context).ConfigureAwait(false);
 
             return await Context.SaveChangesAsync();
         }

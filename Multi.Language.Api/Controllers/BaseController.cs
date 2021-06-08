@@ -4,7 +4,7 @@ using Microsoft.Extensions.Primitives;
 using Multi.Language.Api.Helpers;
 using Multi.Language.Application.Commands;
 using Multi.Language.Application.Queries;
-using Multi.Language.Application.Authorization;
+using Multi.Language.Infrastructure.Authorization;
 
 namespace Multi.Language.Api.Controllers
 {

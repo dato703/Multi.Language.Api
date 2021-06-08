@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Multi.Language.Api.Configuration;
-using Multi.Language.Application.Authorization;
 using Multi.Language.Domain.SeedWork;
 using Multi.Language.Infrastructure;
 using Multi.Language.Infrastructure.Redis;
@@ -17,6 +16,7 @@ using Autofac.Extensions.DependencyInjection;
 using Multi.Language.Application;
 using Multi.Language.Application.Configuration;
 using Multi.Language.Domain.AggregatesModel.UserAggregate;
+using Multi.Language.Infrastructure.Authorization;
 using Multi.Language.Infrastructure.EventSourcing;
 
 namespace Multi.Language.Api
@@ -37,7 +37,7 @@ namespace Multi.Language.Api
             services.AddControllers();
             services.AddSwaggerMiddleWear();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IDomainEventHandler, DomainEventHandler>();
+            services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
             services.AddScoped<IEventStoreRepository, EventStoreSqlRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();

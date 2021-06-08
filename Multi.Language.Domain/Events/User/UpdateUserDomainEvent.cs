@@ -5,7 +5,7 @@ namespace Multi.Language.Domain.Events.User
 {
     public class UpdateUserDomainEvent : DomainEvent
     {
-        public UpdateUserDomainEvent(Guid userId, string password, string email)
+        public UpdateUserDomainEvent(Guid userId, string password, string email) : base(userId)
         {
             Password = password;
             Email = email;

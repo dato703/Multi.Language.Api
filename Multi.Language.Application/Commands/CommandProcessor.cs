@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using App.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Multi.Language.Application.Authorization;
 using Multi.Language.Domain.SeedWork;
+using Multi.Language.Infrastructure.Authorization;
 
 namespace Multi.Language.Application.Commands
 {

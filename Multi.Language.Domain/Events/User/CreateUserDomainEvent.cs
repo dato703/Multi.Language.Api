@@ -4,7 +4,7 @@ namespace Multi.Language.Domain.Events.User
 {
     public class CreateUserDomainEvent : DomainEvent
     {
-        public CreateUserDomainEvent(AggregatesModel.UserAggregate.User user)
+        public CreateUserDomainEvent(AggregatesModel.UserAggregate.User user) : base(user.Id)
         {
             User = user;
         }

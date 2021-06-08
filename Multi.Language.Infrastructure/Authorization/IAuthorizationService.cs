@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Multi.Language.Domain.AggregatesModel.UserAggregate;
 
-namespace Multi.Language.Application.Authorization
+namespace Multi.Language.Infrastructure.Authorization
 {
     public interface IAuthorizationService
     {

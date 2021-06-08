@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using Multi.Language.Domain.AggregatesModel.UserAggregate;
 
-namespace Multi.Language.Application.Authorization
+namespace Multi.Language.Infrastructure.Authorization
 {
     public class AuthorizationUser
     {
