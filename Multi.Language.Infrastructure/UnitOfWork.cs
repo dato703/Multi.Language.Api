@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Multi.Language.Domain.AggregatesModel.UserAggregate;
@@ -19,7 +20,9 @@ namespace Multi.Language.Infrastructure
             Context = context;
             _domainEventDispatcher = domainEventDispatcher;
         }
+
         public IUserRepository UserRepository => new UserRepository(Context);
+
         public async Task UseTransaction(Action action)
         {
             await using var dbContextTransaction = await Context.Database.BeginTransactionAsync();
@@ -44,11 +47,11 @@ namespace Multi.Language.Infrastructure
             }
         }
 
-        public virtual async Task<int> CompleteAsync()
+        public virtual async Task<int> CommitAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             await _domainEventDispatcher.DispatchDomainEventsAsync(Context).ConfigureAwait(false);
 
-            return await Context.SaveChangesAsync();
+            return await Context.SaveChangesAsync(cancellationToken);
         }
 
         private bool _disposed;

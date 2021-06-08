@@ -25,7 +25,7 @@ namespace Multi.Language.Application.Commands.User
             user.Update(request.Password, request.Email);
 
             await _unitOfWork.UserRepository.UpdateAsync(user);
-            await _unitOfWork.CompleteAsync();
+            await _unitOfWork.CommitAsync(cancellationToken);
 
             return Unit.Value;
         }

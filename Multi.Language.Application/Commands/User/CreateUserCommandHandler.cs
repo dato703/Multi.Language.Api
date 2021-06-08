@@ -20,7 +20,7 @@ namespace Multi.Language.Application.Commands.User
             var user = new Domain.AggregatesModel.UserAggregate.User(Guid.NewGuid(), request.UserName, request.Password, request.Email, UserRole.User);
             //user.Validate();
             await _unitOfWork.UserRepository.AddAsync(user);
-            await _unitOfWork.CompleteAsync();
+            await _unitOfWork.CommitAsync(cancellationToken);
             return user.Id;
         }
     }

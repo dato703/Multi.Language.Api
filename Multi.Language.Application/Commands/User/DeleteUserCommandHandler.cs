@@ -23,7 +23,7 @@ namespace Multi.Language.Application.Commands.User
             }
 
             _unitOfWork.UserRepository.Remove(user);
-            await _unitOfWork.CompleteAsync();
+            await _unitOfWork.CommitAsync(cancellationToken);
 
             return Unit.Value;
         }

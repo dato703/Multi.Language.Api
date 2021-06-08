@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Multi.Language.Domain.AggregatesModel.UserAggregate;
 
@@ -9,6 +10,6 @@ namespace Multi.Language.Domain.SeedWork
         public IUserRepository UserRepository { get; }
         Task UseTransaction(Action action);
         void DetachChanges();
-        Task<int> CompleteAsync();
+        Task<int> CommitAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }
